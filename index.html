@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tirage</title>
+    <style type="text/css">
+	body {
+    font-family: 'Open sans', Times, sans serif;
+    margin: 0;
+    background: url(images/MockUp-3.jpg);
+    background-size: cover;
+	background-attachment : fixed;
+    color: black;
+    text-align: center;
+    }
+
+    h1 {
+    font-family: 'Open sans', Times, sans serif;
+    margin: 0;
+    color: #dc718f;
+    text-align: center;
+    }
+
+    p {
+	text-align: justify;
+    }
+
+    .hide {
+    display: none;
+    }
+
+    button {
+	font-family: 'Open sans', sans serif;
+    background: #8ed1cf;
+    border:1px solid #439989;
+    border-radius: 50px;
+    padding:5px 15px;
+    color:white;
+    font-size: 1em;
+    cursor: pointer;
+    }
+
+    #tirage {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding-left: 0;
+    }
+
+    #tirage li {
+    flex-basis: 30%;
+    }
+	
+    #tirage li img {
+    height: 417px;
+    width: 276px;
+    object-fit: contain;
+    }
+	
+    #tirage li h2 {
+    text-transform: uppercase;
+    }
+
+    #feuille p {
+	padding-left: 100;
+	text-align: center;
+    font-family: 'Open sans', Times, sans serif;
+	font-size : 10 px;
+    color: black;
+    }
+    </style>
+</head>
+<body>
+	<div id="feuille">
+		<img src="images/Feuillage-CFNE.png" alt="Feuillage-CFNE.png" id="feuille-img" style="width: 156px; height: 160px; transform: translate(0px, 0px);">
+		<h1>Tirage avec l'Oracle "Les essentielles"</h1>
+		<p>Lancez le tirage afin de découvrir votre synergie de 3 huiles essentielles du jour. Cliquez 3 fois pour effectuer le tirage des 3 cartes.</p>
+	</div>
+		<button id="go">✿ Ma synergie du jour ✿</button>
+		<button id="replay" class="hide">⟲ Faire un autre tirage ⟲</button>
+		<ul id="tirage">
+			<li><img src="images/dos.png" /></li>
+			<li><img src="images/dos.png" /></li>
+			<li><img src="images/dos.png" /></li>
+		</ul>
+
+    <script>
+	//déclaration des variables
+let html = ``;
+let card, nb;
+
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+ 
+function atIndex(number, set) {
+    let count = 2;
+    for (let line of set) {
+        if (count  === (number)) {
+            return line;
+        }
+        count++;
+    }
+}
+
+function displayCard() {
+    html += `<li><img src="images/${nb - 1}.png" alt="${card.nom}"> 
+    <h2>${card.num} - ${card.nom}</h2>
+    <p>${card.signification}</p>
+    </li>`;
+    document.querySelector("ul#tirage").innerHTML = html;
+}
+
+function pickCard() {
+    do {
+
+        nb = getRandomInteger(1, (arcanes.size));
+    } while (tirage.has(nb))
+
+    tirage.add(nb);
+
+    card = atIndex(nb, arcanes);
+
+    displayCard();
+
+    if (tirage.size == 3) {
+        document.querySelector("#go").classList.add("hide");
+        document.querySelector("#replay").classList.remove("hide");
+    }
+}
+
+
+let tirage = new Set(); //variable qui contiendra les numéros des cartes tirées
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelector("#go").addEventListener('click', pickCard);
+
+    document.querySelector("#replay").addEventListener('click', function () {
+        window.location.reload();
+    });
+});
+	</script>
+    <script>
+	let arcanes = new Set([
+    {
+        num: "1",
+        nom: "BASILIC",
+        signification: `Le basilic nous permet d’évacuer le trop-plein et nous aide à mieux digérer.
+		Il diminue les angoisses et les peurs de manque, c’est un anti ruminations qui va nous calmer dans les évènements difficiles de la vie. 
+		Il apporte le calme au grand nerveux. Il nous fait profiter de son énergie, pour tout lâcher, nous redonner du courage et réaliser nos buts. 
+		En stimulant notre besoin d’action, le basilic nous permet de découvrir notre propre potentiel ainsi que notre mission de vie sur terre.`
+    },
+    {
+        num: "2",
+        nom: "BERGAMOTE",
+        signification: `On pourrait comparer la bergamote à un rayon de soleil mis en bouteille.Équilibrante, calmante, sédative et positivante, elle donne du courage et
+		l’envie d’entreprendre en amenant l’affirmation de soi. La bergamote rend optimiste en chassant le pessimisme. Elle favorise l’harmonie entre le plan mental et affectif, et augmente en nous la sensation
+		de bonheur, de paix et de calme. En comblant notre manque de joie, elle nous aide à sortir de l’empathie pour retrouver notre harmonie. En élevant notre esprit, elle nous rend plus
+		lucide et nous aide à fortifier notre mental. La peur et l’anxiété font place à la confiance et l’assurance en soi.`
+    },
+    {
+        num: "3",
+        nom: "BOIS DE ROSE",
+        signification: `Le bois de rose a un côté très maternel et sa douceur est communicative.Son caractère charnel, sentimental, souriant et attentif, nous procure des
+		effets, soit apaisant, soit stimulant. C’est une huile qui conviendra très bien aux mélancoliques et aux personnes dépressives qui ont un sentiment d’abandon, de tristesse, mais aussi pour les états de grande fatigue et de
+		surmenage.		En augmentant les émotions positives, l’huile essentielle de bois de rose va favoriser une action tonique sur le psychisme. Très réconfortante, elle lutte
+		contre la morosité en chassant les idées noires et la tristesse, pour faire place à l’estime de soi, la confiance et booster le moral.
+		Très utile pour les thérapeutes, elle accompagne aussi les personnes âgées en fin de vie.`
+    },
+    {
+        num: "4",
+        nom: "CAMOMILLE ROMAINE",
+        signification: `La camomille romaine est très efficace lors des chocs émotionnels, mais aussi contre tous les chocs nerveux. Avec son effet calmant, elle éloigne les
+		angoisses, les peurs et les tensions nerveuses. En plus de son effet antistress,elle calme les colères, apaise les frustrations, diminue l’excitation et optimise les pessimistes.
+		L’huile essentielle de camomille romaine va aider à l’acceptation et à la revalorisation de soi. Elle permettra aussi de tempérer les excès de toute nature. 
+		Excellente contre les idées fixes, elle va nous aider à trouver la paix, nous rassurer, mais aussi favoriser le sommeil lors des insomnies liées au stress. 
+		C’est une huile qui sera très efficace pour les hyperactifs, ou les acharnés du travail.`
+    },
+    {
+        num: "5",
+        nom: "CANNELLE",
+        signification: `La cannelle permet de digérer au sens propre. C’est une huile qui apporte chaleur, énergie et puissance solaire. 
+		Avec son effet dynamisant, elle encourage l’inventivité, la créativité et permet d’augmenter notre potentiel. En stimulant notre sens, notre volonté et notre force vitale, la cannelle nous
+		donne envie de les employer en faisant preuve d’audace.Elle va développer la chaleur humaine, même pour les coeurs les plus froids.
+		Cette huile essentielle peut être utiliser pour nous revigorer, pour élever notre esprit, fortifier notre organisme et vivifier notre âme. 
+		Elle réchauffera notre être dans sa globalité et nous aidera à prendre le taureau par les cornes.`
+    },
+    {
+        num: "6",
+        nom: "CEDRE",
+        signification: `Huile de nos ancêtres qui nous guide vers l’avant, elle nous aide à continuer l’histoire avec notre propre identité. 
+		Elle permet de se centrer, de méditer et amène à la concentration en évitant toute dispersion mentale. Le cèdre donne la force de résister à certains évènements de la vie. 
+		Il connecte l’énergie de la terre à celle du ciel en mobilisant la force vitale vers les fonctions spirituelles de notre âme, en favorisant l’élévation de celle ci.
+		L’huile essentielle de cèdre est aussi efficace pour se libérer du stress, des colères refoulées et des frustrations. Elle nous réapprend à être patient.
+		Enfin, elle permet d’ouvrir notre esprit et de nous reconnecter à notre histoire familiale en acceptant l’énergie du passé comme un point de départ.`
+    },
+    {
+        num: "7",
+        nom: "CISTE",
+        signification: `L’huile essentielle de ciste est efficace pour réguler les changements d’humeur et les caractères cyclothymiques. Elle tempère aussi les excès d’inquiétude. 
+		Elle apporte chaleur et permet de se recentrer sur sa propre liberté.Aussi, elle aide à se connecter et à s’ancrer à sa propre source, à ce qui est bon et juste pour soi, 
+		permettant ainsi de se détacher d’une dépendance affective. L’huile essentielle de ciste pourra aider les femmes qui sont entourées d’hommes au travail en éloignant la domination masculine.
+		Elle facilite aussi le dégagement des raisons de nos colères et permet surtout d’en cicatriser.`
+    },
+    {
+        num: "8",
+        nom: "CITRON",
+        signification: `Le citron est un stimulant par excellence. Que ce soit sur le plan psychique ou pour donner de l’entrain, il favorise la clarté d’esprit.
+		Efficace pour retrouver le tonus et la joie de vivre, cette huile rend optimiste, éveille la conscience, et nous aide à sortir de la procrastination tout en
+		restant concentré sur la tâche à accomplir. Elle nous permet de prendre les bonnes décisions rapidement mais surtout sans émotivité ou anxiété. Elle a
+		une action aussi sur le manque de confiance en soi.	L’huile essentielle de citron est en mesure de réveiller l’enfant intérieur
+		même chez un adulte trop sérieux, ce qui permettra une meilleure expression de soi. Elle renforce également le mental des malades déprimés ou en phase terminale.`
+    },
+    {
+        num: "9",
+        nom: "CYPRES",
+        signification: `L’huile essentielle de cyprès est idéale pour les personnes qui ont une peur panique de vieillir. Elle permet d’élever nos pensées vers les choses
+		essentielles de la vie et aussi de l’après vie. C’est aussi une huile qui dynamise la concentration, en évitant la dispersion
+		et nous aide à prendre le temps de la réflexion avant de se décider et nous amène aussi vers la concrétisation. En fortifiant la force intérieure, elle va
+		aussi renforcer le système nerveux fragile. C’est une huile essentielle de passage qui va favoriser l’introspection, la détente psychique, la méditation
+		ainsi que le calme le plus profond.`
+    },
+    {
+        num: "10",
+        nom: "EPINETTE",
+        signification: `L’huile essentielle d’épinette a une action importante sur le mental car elle permet de rassembler à la fois l’énergie et les idées. 
+		Elle va nous booster et nous propulser pour avancer vers une nouvelle étape de notre vie. Elle est efficace contre les baisses de régime et les coups de blues.
+		C’est une huile qui va aider les personnes hésitantes et timides à mobiliser leurs propres ressources, à sortir de l’empathie et à arrêter de procrastiner.
+		Enfin, elle a la capacité de combler un manque de joie et de créativité en nous, permettant d’affirmer nos choix, tout en chargeant à bloc notre
+		énergie mentale et physique.`
+    },
+    {
+        num: "11",
+        nom: "GERANIUM",
+        signification: `L’huile essentielle de géranium est utile pour retrouver un équilibre psychique en restant centré sur l’essentiel de la vie. 
+		Elle permet de dynamiser son pouvoir de séduction, d’influencer son charisme et de devenir optimiste. Elle favorise le calme lors d’agitation nerveuse et favorise l’harmonisation du
+		yin et du yang, c’est-à-dire les aspects féminin et masculin. Cette huile permet de s’ouvrir aux autres, d’équilibrer nos relations avec l’entourage, stimuler la réceptivité mais ne correspond pas aux personnes
+		sans expérience, ni vécu.`
+    },
+    {
+        num: "12",
+        nom: "GINGEMBRE",
+        signification: `L’huile essentielle de gingembre permet de réchauffer le coeur tout en allégeant l’esprit.
+		À la fois tonique et aphrodisiaque, elle est idéale pour les personnes dont les inhibitions sont d’ordre mental. Elle va permettre la digestion en séparant
+		l’émotionnel du mental. Cette huile va permettre aux esprits qui s’évadent trop de se recentrer.
+		Elle aidera aussi à se concentrer dans le travail, d’être plus terre à terre en apportant détermination et dynamisme afin de réaliser les objectifs fixés.`
+    },
+    {
+        num: "13",
+        nom: "HELICRYSE",
+        signification: `Anti choc émotionnel très puissante, l’huile essentielle d’hélichryse apaise les douleurs et les traumatismes, les deuils et les moments difficiles de la
+		vie. Elle dénoue les noeuds dans certaines situations en permettant surtout de ne pas répéter les mêmes erreurs.
+		L’hélichryse aide pour guérir des blessures psychologiques intervenues dans l’enfance entre zéro et cinq ans, ainsi que les blocages dus aux abus sexuels.
+		Elle permet de s’ancrer aux forces de la terre, s’enraciner et s’équilibrer, surtout lors des épisodes de stress intense. Avec son effet anti stress,
+		inspirateur de la force intérieure, elle procure un effet apaisant pour combattre la nervosité et amener la paix intérieure. C’est l’huile qui soigne les plaies de l’âme.`
+    },
+    {
+        num: "14",
+        nom: "JASMIN",
+        signification: `Bien que la fleur soit délicate, cette huile très puissante peut déclencher une crise de larmes et possède un réel effet aphrodisiaque.
+		L’huile essentielle de jasmin facilite la compréhension de notre blocage et la cause du problème. Elle est excellente pour la régulation émotionnelle.
+		C’est en quelque sorte la force tranquille qui va nous mener vers la paix et la tranquillité.
+		Elle procure une sensation de bien-être très utile lors des périodes de déprime, en particulier en cas de dépression post-partum. Enfin, elle nous permet de retrouver du réconfort en période de doute, d’avoir confiance
+		en soi et de retrouver le sourire et de renaître après la traversée du désert.`
+    },
+    {
+        num: "15",
+        nom: "LAURIER NOBLE",
+        signification: `Le laurier noble représente l’immortalité, la renaissance et l’indomptabilité. Il est efficace pour lutter contre les angoisses, les peurs, la mélancolie ainsi
+		que pour diminuer les psychoses. Le laurier noble renforce la mémoire, la concentration et permet de mieux s’exprimer verbalement. Il est donc très efficace pour tous ceux qui se sousestiment
+		et qui sous-estiment leurs capacités intellectuelles. Enfin, l’huile essentielle de laurier noble permet de faire face aux pervers narcissiques.On dit qu’elle rend l’impossible possible !`
+    },
+    {
+        num: "16",
+        nom: "LAVANDE VRAIE",
+        signification: `Tout autant calmante que dynamisante, l’huile essentielle de lavande, grâce à son action relaxante, apporte la paix, la sérénité et tranquillise en profondeur.
+		Elle va purifier l’aura et l’individualité. Elle permet ainsi de faire des choix en conscience afin de trouver son chemin et de réaliser ses buts. Aussi, elle conduit au respect de soi, en s’acceptant mais aussi en facilitant le
+		discernement dans sa vie. La lavande est efficace pour résoudre les états de choc et réconforter en cas d’agression. Elle nettoiera les peurs et les phobies, tel un anti cauchemar
+		naturel qui permet de s’ouvrir sans crainte sur son avenir.`
+    },
+    {
+        num: "17",
+        nom: "MANDARINE ROUGE",
+        signification: `On peut comparer la mandarine rouge à un rayon de soleil en plein hiver.Grâce à son côté jovial et enfantin, elle va réveiller et adoucir les coeurs froids
+		et fermés. Elle est efficace contre les ruminations, et l’anxiété qui en découle,en permettant de retrouver notre légèreté enfantine. Elle vaincra le cynisme en nous reconnectant à notre enfant intérieur.
+		La mandarine rouge est aussi utile pour calmer et favoriser le sommeil. Enfin, grâce à l’huile essentielle de mandarine rouge, il devient possible de se lancer innocemment dans de nouveaux projets et en oublier la peur de
+		l’inconnu.`
+    },
+    {
+        num: "18",
+        nom: "MARJOLAINE",
+        signification: `L’huile essentielle de marjolaine évite les montagnes russes émotionnelles grâce à son effet relaxant et apaisant. Lorsqu’on se sent oppressé, stressé,
+		anxieux et dans l’incapacité de se calmer, elle va permettre que nous retrouvions la paix intérieure.
+		La marjolaine va aussi apaiser l’esprit tout en le tonifiant et nous évitera les débordements dus à la colère, en équilibrant et modulant les excès.
+		La marjolaine va calmer le bavardage mental, le sentiment de culpabilité et de persécution que nous pouvons ressentir dans certaines situations.`
+    },
+    {
+        num: "19",
+        nom: "MENTHE POIVREE",
+        signification: `La menthe poivrée permet de faire preuve de discernement en chassant l’inquiétude et en nous recentrant sur l’essentiel. 
+		Elle permet de garder la tête froide même lors des épisodes d’hyperémotivité, de colère ou de confusion mentale. 
+		L’huile essentielle de menthe poivrée va à la fois faciliter et stimuler la concentration, ainsi que les fonctions mentales et cérébrales.
+		Elle nous apporte l’énergie mentale nécessaire pour décrocher la lune !
+		La menthe poivrée va aussi aider à digérer et évacuer les ruminations, à lâcher prise, et à se vider l’esprit, tout en nous apportant une touche de fraîcheur. Enfin, elle apporte l’harmonie et la vitalité affective en nous
+		permettant la connexion au monde extérieur à travers une perception plus claire de ce qui nous entoure.`
+    },
+    {
+        num: "20",
+        nom: "MUSCADE",
+        signification: `L’huile essentielle de muscade facilite la communication afin de digérer les rancoeurs les plus profondes, tout en nous tournant vers les autres. 
+		Avec son caractère festif, appétent et réchauffant, elle va permettre de retrouver du courage et de l’assurance.
+		La muscade apaise les tensions intérieures, permet de dépasser sa colère et de digérer les aléas de la vie. Elle sera aussi très utile pour ceux qui souhaitent comprendre un secret de famille. Elle est à utiliser lorsque les
+		huiles basilic et cannelle ne sont pas supportées. C’est l’huile réchauffante du corps et de l’âme.`
+    },
+    {
+        num: "21",
+        nom: "MYRTE",
+        signification: `L’huile essentielle de myrte facilite la respiration physique mais aussi mentale. Elle permet de parler de tout ce qui vient à l’esprit et de s’évader. À
+		la fois calmante et tonifiante, elle va être utile pour combattre les mauvaises habitudes et lutter contre les angoisses.
+		Enfin, la myrte sera très efficace pour lutter contre l’effondrement psychologique.`
+    },
+    {
+        num: "22",
+        nom: "NARD",
+        signification: `On peut comparer l’huile essentielle de Nard au Dalaï lama. Elle enracine à la terre et élève la conscience en rétablissant les liens entre le corps et
+		l’esprit surtout dans les moments de doute. Elle dissout le stress, la fatigue, la déprime mais aussi les peurs, l’angoisse, le chagrin et les blocages divers.
+		En période de deuil elle va nous apporter sécurité et réconfort. L’huile essentielle de Nard permet aussi de dédramatiser et de se libérer des contraintes en lâchant prise.
+		Huile équilibrante sur le plan émotionnel, elle amène à la paix intérieure en nous permettant de faire le lien entre nos convictions spirituelles et la vie quotidienne. Cicatrisante de l’âme et des blessures passées, elle va
+		permettre d’harmoniser tout notre être.`
+    },
+	{
+        num: "23",
+        nom: "NIAOULI",
+        signification: `L’huile essentielle de Niaouili permet d’être solide, enraciné et de se recentrer sur l’essentiel. 
+		Elle agit tel un remontant énergétique aussi bien lors d’un épuisement physique que psychique. Elle contribue à retrouver la confiance en soi et nous aide à lutter contre nos
+		vieux démons. Grâce à sa capacité à s’enraciner, cette huile va permettre au thérapeute de se protéger pendant ses consultations tout en restant bien ancré dans le moment présent.
+		Enfin, l’huile de Niaouli évite les confusions mentales, tonifie le psychisme et facilite notre choix de s’affirmer.`
+    },
+	{
+        num: "24",
+        nom: "NEROLI",
+        signification: `L’huile essentielle de Néroli permet le rééquilibrage du système nerveux lors d’un état de surmenage ou de fatigue émotionnelle. 
+		Elle atténue et apaise les chocs, les angoisses, les peurs et les dépressions issues de blessures physiques et psychiques.
+		D’une grande aide pour les hypersensibles et ceux qui s’inquiètent pour un rien, elle aide à lutter contre les idées fixes, elle va procurer une sensation de
+		légèreté, développer la joie, redonner la vitalité, le courage et la confiance en soi grâce à son effet tonique.
+		Son côté maternel et protecteur nous aide à retrouver la pureté et l’innocence de notre âme d’enfant, en se libérant des charges et des souffrances du passé.
+		Elle sera aussi très efficace contre les terreurs nocturnes chez les enfants.`
+    },
+	{
+        num: "25",
+        nom: "OLIBAN",
+        signification: `L’huile essentielle d’oliban (encens) agit tel un antidépresseur. Elle permet de prendre de la hauteur et de restaurer l’harmonie entre le physique et le
+		mental. L’oliban apaise les angoisses et les peurs en permettant d’installer le calme intérieur, de se libérer de la peur de l’avenir, de l’agitation et du questionnement mental incessant.
+		L’huile essentielle d’oliban (encens) permet d’ouvrir à la spiritualité en permettant de faire le lien entre notre «moi supérieur» et le divin. Elle élève alors l’esprit, permettant ainsi l’introspection, la relaxation puis la
+		méditation. Elle va aussi aider à maintenir notre endurance, ainsi que l’envie tenace de réaliser nos projets.`
+    },
+	{
+        num: "26",
+        nom: "PATCHOULI",
+        signification: `L’huile essentielle de patchouli permet l’élévation de la conscience, de découvrir sa vraie nature, et de s’accepter tel que nous sommes réellement.
+		En favorisant l’enracinement, elle va nous aider à combattre les angoisses, les peurs, les incertitudes et l’instabilité. Très utile pour les personnes timides,
+		elle aidera à retrouver la confiance en soi et la possibilité d’exprimer ses émotions de manière très calme.
+		Le patchouli est également huile de la sensualité, elle invite à la détente, à la relaxation et à la méditation. Avec ses effets aphrodisiaques, elle favorisera
+		la désinhibition chez certaines personnes. Enfin, le patchouli est idéal pour s’ancrer et revenir à des choses plus concrètes.`
+    },
+	{
+        num: "27",
+        nom: "PETIT GRAIN",
+        signification: `Cette huile représente le père, chaleureux et câlin. Elle va être très harmonisante lors des problèmes affectifs. Elle permet d’encaisser les chocs
+		et de passer les moments difficiles de l’existence en facilitant le retour à la joie et à l’harmonie.
+		Ré équilibrante et apaisante, l’huile essentielle de petit grain amène la bienveillance et la protection des coeurs blessés et solitaires. En amenant le
+		besoin de se confier et en favorisant l’apparition des souvenirs, il sera plus facile de retrouver la confiance en soi et l’envie d’avoir envie. C’est une huile
+		qui apportera de la douceur et de la chaleur dans notre vie.`
+    },
+	{
+        num: "28",
+        nom: "PIN",
+        signification: `Quand on a besoin de respirer physiquement, l’huile essentielle de pin est faite pour ça, elle sera aussi très efficace pour calmer l’asthme et les allergies.
+		Huile très positive lors de la lassitude ou de la fatigue morale, elle apporte une bouffée d’oxygène lors de sensations oppressantes et de sentiments d’étouffement. 
+		Elle va transmettre la force, l’énergie vitale, la vigueur, le courage et la volonté nécessaire pour positiver lors des états anxiogènes et aidera à recharger les batteries.
+		En plus de remonter le moral, elle va favoriser la relaxation tout en apportant un côté tonique. C’est une huile qui améliore la concentration et la facilité de s’évader mentalement. On peut vraiment compter sur elle pour supprimer
+		les états de stress lors d’un épuisement mental et physique.`
+    },
+	{
+        num: "29",
+        nom: "ROMARIN CINEOLE",
+        signification: `L’huile essentielle de romarin cinéole permet de reprendre son souffle. Elle allège la sensation de fatigue mais va aussi agir sur le manque de patience.
+		Son côté tonique va nous donner l’élan et la force pour nous affirmer, en retrouvant de l’assurance tout en gardant les idées claires. Elle a une action importante sur la concentration, elle élève l’esprit, chasse la confusion
+		mentale et permet de nous recentrer sur l’essentiel.
+		Cette huile est très efficace contre le stress, le trac et pour contrôler nos émotions. Grâce à cette bonne humeur et vivacité d’esprit retrouvées, il devient facile de bien respirer et d’avoir à nouveau des pensées ensoleillées.`
+    },
+	{
+        num: "30",
+        nom: "ROSE DE DAMAS",
+        signification: `Huile merveilleuse comme la fleur dont elle est extraite, la rose de Damas apporte le calme, la tendresse, la paix intérieure, la compassion et ouvre
+		à l’amour universel. Elle va nous toucher au plus profond de notre être, en harmonisant nos émotions, en calmant notre esprit, en clarifiant nos pensées, tout en allant vers des sentiments positifs et bienfaisants. Elle
+		apporte aussi le lâcher prise, permet de s’ouvrir aux autres et soulage de l’empathie.
+		Apaisante du système nerveux, elle va aussi aider à le tonifier. Aphrodisiaque pour les femmes manquant de confiance en elles, la rose de Damas permettra d’élever notre taux vibratoire. Enfin, l’huile essentielle de rose de
+		Damas peut être utile pour accompagner en fin de vie.`
+    },
+	{
+        num: "31",
+        nom: "SANTAL",
+        signification: `L’huile essentielle de santal est une huile plutôt masculine. Elle va être utile pour la désinhibition et favoriser l’ouverture à soi ainsi qu’aux autres.
+		Elle permet également de calmer son mental afin de revenir paisiblement vers nos origines, notre base et nos racines. Elle va harmoniser le corps et l’esprit en favorisant les relations à autrui et nous permet de traverser avec
+		courage les étapes importantes et difficiles de notre vie.
+		Elle améliore le sommeil, tonifie notre psychisme, et va aussi nous convenir lorsque nous avons le sentiment d’abandon et de solitude.`
+    },
+	{
+        num: "32",
+        nom: "SAUGE SCLAREE",
+        signification: `L’huile essentielle de sauge sclarée permet de nous relier à notre féminité et à notre propre douceur maternelle. C’est une huile équilibrante, qui apaise
+		et stimule à la fois, stabilise et permet l’adaptabilité au quotidien. Très utile pour arrêter le questionnement mental, diminuer la confusion, élever l’esprit afin d’ avoir l’énergie d’entrer en action. Très efficace aussi
+		pour les perfectionnistes qui ont tendance à avoir une étroitesse d’esprit. C’est une huile efficace lors des épisodes de dépression, de tristesse, de peur ou lors de sautes d’humeur liées aux changements hormonaux,
+		(ménopause et puberté).
+		Bien évidemment, c’est aussi l’huile purifiante avant la méditation, qui permet de se concentrer sur son intention et aide aussi à se souvenir de ses rêves.`
+    },
+	{
+        num: "33",
+        nom: "THYM VULGAIRE",
+        signification: `L’huile essentielle de thym vulgaire redonne force, vigueur et détermination en influant sur notre volonté d’agir. Elle sera très utile pour les hypersensibles,
+		les introvertis, les timides et tous ceux dont la santé est fragile. Le thym vulgaire permet d’entrer en contact avec les autres en supprimant les obstacles qui entravent notre relation à autrui. Elle est aussi utile pour les
+		troubles psychiques des enfants vivant des conflits familiaux et facilitera la libération de schéma répétitif du passé.`
+    },
+	{
+        num: "34",
+        nom: "VERVEINE",
+        signification: `L’huile essentielle de verveine permet de profiter du présent. C’est une huile aux vertus harmonisantes et adaptogènes, très utile pour les personnes
+		lasses de la vie, inquiètes, angoissées et soucieuses. Elle nous permet de retrouver la joie de vivre et d’avoir le moral au beau fixe.
+		Utilisée pour faire pétiller notre vie et retrouver notre créativité, on peut aussi l’utiliser le soir pour son action sédative.`
+    },
+	{
+        num: "35",
+        nom: "VETIVER",
+        signification: `C’est une huile efficace pour calmer l’hyperactivité des enfants. Elle va permettre de retrouver la tranquillité et nous transmet force, puissance et
+		sécurité sur le plan physique, matériel mais aussi relationnel. L’huile essentielle de Vétiver aide à retrouver le sens des réalités, en s’enracinant dans l’ici et maintenant, se connectant à soi-même et à son
+		environnement et en retrouvant un sens pratique plus terre à terre. 
+		Elle permet de s’éloigner des rêveries et des fantasmes et sera très utile pour les personnes sensibles et influençables afin de se détacher des sentiments des autres.`
+    },
+	{
+        num: "36",
+        nom: "YLANG YLANG",
+        signification: `Son nom nous fait déjà voyager dans l’exotisme. Avec son caractère sensuel exotique, l’huile essentielle d’Ylang Ylang a des vertus harmonisantes et
+		bienveillantes. Elle va apporter joie, gaieté, légèreté et même de l’euphorie, sans pour autant nous faire culpabiliser de ressentir ces émotions positives.
+		Pour les acharnés de travail, elle va aider à lâcher prise et à débrancher. Elle développe l’intuition, la créativité et permet aux timides de s’exprimer avec plus d’assurance. Pour les personnes introverties, elle facilitera la
+		communication. Elle sera aussi d’une grande aide pour lutter contre la tristesse et la morosité, en réveillant la passion et l’envie de profiter de la vie.
+		Elle permet aux femmes d’intégrer leur féminité et à chacun de profiter de son effet anxiolytique.`
+    },
+]);
+
+	</script>
+</body>
+<footer><p><i>www.phanouel.com</i></p></footer>
+</html>
